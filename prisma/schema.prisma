@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model Workspace {
+  id         String    @id @default(uuid())
+  name       String
+  imageUrl   String?
+  inviteCode String
+  members    Member[]
+  projects   Project[]
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Member {
+  id          String    @id @default(uuid())
+  userId      String
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  role        Role
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  name        String
+  workspaceId String
+  worskpace   Workspace @relation(fields: [workspaceId], references: [id])
+}
