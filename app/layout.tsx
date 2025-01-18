@@ -1,5 +1,9 @@
+import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs"
+import { ClientProvider } from "@/providers/query-client-provider";
+import { ModalProviders } from "@/providers/modal-providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ModalProviders />
+        <Toaster />
+        <ClerkProvider>
+          <ClientProvider>
+            {children}
+          </ClientProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
