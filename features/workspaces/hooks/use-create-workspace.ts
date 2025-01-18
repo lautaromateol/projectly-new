@@ -6,7 +6,7 @@ interface UseCreateWorkspace {
   close: () => void;
 }
 
-export const UseCreateWorkspace = create<UseCreateWorkspace>((set) => ({
+export const useCreateWorkspaceModal = create<UseCreateWorkspace>((set) => ({
   isOpen: false,
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false })
