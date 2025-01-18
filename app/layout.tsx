@@ -31,13 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ModalProviders />
-        <Toaster />
-        <ClerkProvider>
-          <ClientProvider>
+        <ClientProvider>
+          <ClerkProvider>
+            <ModalProviders />
+            <Toaster />
             {children}
-          </ClientProvider>
-        </ClerkProvider>
+          </ClerkProvider>
+        </ClientProvider>
       </body>
     </html>
   );
