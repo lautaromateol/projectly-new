@@ -7,6 +7,29 @@ import { prisma } from "@/lib/prisma";
 import { generateInviteCode } from "@/lib/utils";
 
 const app = new Hono()
+  .get("/",
+    async (c) => {
+      const { userId } = await auth()
+
+      if (!userId) {
+        return c.json({ message: "Unauthorized." }, 401)
+      }
+
+      const workspaces = await prisma.workspace.findMany({
+        where: {
+          members: {
+            some: {
+              userId: {
+                equals: userId
+              }
+            }
+          }
+        }
+      })
+
+      return c.json({ data: workspaces }, 200)
+    }
+  )
   .post("/",
     zValidator("form", createWorkspaceSchema, (result, c) => {
       if (!result.success) {
