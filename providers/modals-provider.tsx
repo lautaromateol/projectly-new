@@ -1,8 +1,9 @@
 "use client"
+import { WorkspaceSettingsWrapper } from "@/features/settings/components/workspace-settings-wrapper"
 import { CreateWorkspaceFormWrapper } from "@/features/workspaces/components/create-workspace-form-wrapper"
 import { useEffect, useState } from "react"
 
-export function ModalProviders() {
+export function ModalsProvider() {
 
   const [isMounted, setIsMounted] = useState(false)
 
@@ -14,6 +15,7 @@ export function ModalProviders() {
     return (
       <>
         <CreateWorkspaceFormWrapper />
+        <WorkspaceSettingsWrapper />
       </>
     )
   }
