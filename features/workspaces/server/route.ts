@@ -221,5 +221,34 @@ const app = new Hono()
       return c.json({ data: workspace }, 200)
     }
   )
+  .delete("/:workspaceId",
+    async (c) => {
+      const { userId } = await auth()
+      const { workspaceId } = c.req.param()
+
+      if(!userId) {
+        return c.json({ message: "Unauthorized" }, 401)
+      }
+
+      const member = await prisma.member.findFirst({
+        where: {
+          workspaceId,
+          userId
+        }
+      })
+
+      if(!member || member.role !== "ADMIN") {
+        return c.json({ message: "Unauthorized." }, 401)
+      }
+
+      const workspace = await prisma.workspace.delete({
+        where: {
+          id: workspaceId
+        }
+      })
+
+      return c.json({ data: workspace }, 200)
+    }
+  )
 
 export default app
