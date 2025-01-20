@@ -26,7 +26,6 @@ export function useCreateWorkspace() {
     onSuccess: (data) => {
       toast.success(`${data.name} created.`)
       queryClient.invalidateQueries({ queryKey: ["workspaces"] })
-      queryClient.invalidateQueries({ queryKey: ["workspace", { id: data.id }] })
     }, 
     onError: (error) => toast.error(error.message)
   })
