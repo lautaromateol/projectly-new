@@ -1,19 +1,16 @@
 import { Hono } from "hono";
 import { Client, ID, Storage } from "node-appwrite"
-import { auth } from "@clerk/nextjs/server";
 import { zValidator } from "@hono/zod-validator"
 import { createWorkspaceSchema, updateWorskspaceSchema } from "@/features/workspaces/schemas";
 import { prisma } from "@/lib/prisma";
 import { generateInviteCode } from "@/lib/utils";
+import { sessionMiddleware } from "@/lib/session-middleware";
 
 const app = new Hono()
+  .use("*", sessionMiddleware)
   .get("/",
     async (c) => {
-      const { userId } = await auth()
-
-      if (!userId) {
-        return c.json({ message: "Unauthorized." }, 401)
-      }
+      const userId = c.get("userId")
 
       const workspaces = await prisma.workspace.findMany({
         where: {
@@ -37,12 +34,8 @@ const app = new Hono()
       }
     }),
     async (c) => {
-      const { userId } = await auth()
+      const userId = c.get("userId")
       const { name, imageUrl } = c.req.valid("form")
-
-      if (!userId) {
-        return c.json({ message: "Unauthorized." }, 401)
-      }
 
       const client = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
@@ -87,12 +80,8 @@ const app = new Hono()
     })
   .get("/:workspaceId",
     async (c) => {
-      const { userId } = await auth()
+      const userId = c.get("userId")
       const { workspaceId } = c.req.param()
-
-      if (!userId) {
-        return c.json({ message: "Unauthorized." }, 401)
-      }
 
       const workspace = await prisma.workspace.findUnique({
         where: {
@@ -131,13 +120,9 @@ const app = new Hono()
       }
     }),
     async (c) => {
-      const { userId } = await auth()
+      const userId = c.get("userId")
       const { workspaceId } = c.req.param()
       const { name, imageUrl } = c.req.valid("form")
-
-      if (!userId) {
-        return c.json({ message: "Unauthorized." }, 401)
-      }
 
       const member = await prisma.member.findFirst({
         where: {
@@ -191,14 +176,8 @@ const app = new Hono()
   )
   .patch("/join/:inviteCode",
     async (c) => {
-      const { userId } = await auth()
+      const userId = c.get("userId")
       const { inviteCode } = c.req.param()
-
-      console.log(c)
-
-      if (!userId) {
-        return c.json({ message: "Unauthorized." }, 401)
-      }
 
       const workspace = await prisma.workspace.findFirst({
         where: {
@@ -223,12 +202,8 @@ const app = new Hono()
   )
   .delete("/:workspaceId",
     async (c) => {
-      const { userId } = await auth()
+      const userId = c.get("userId")
       const { workspaceId } = c.req.param()
-
-      if(!userId) {
-        return c.json({ message: "Unauthorized" }, 401)
-      }
 
       const member = await prisma.member.findFirst({
         where: {
@@ -237,7 +212,7 @@ const app = new Hono()
         }
       })
 
-      if(!member || member.role !== "ADMIN") {
+      if (!member || member.role !== "ADMIN") {
         return c.json({ message: "Unauthorized." }, 401)
       }
 
