@@ -8,7 +8,7 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth()
+  const { userId, redirectToSignIn } = await auth()
 
   if(userId && isPublicRoute(req)) {
     const path = "/dashboard"
@@ -17,8 +17,8 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(pathUrl)
   }
 
-  if(!userId && !isPublicRoute) {
-    return (await auth()).redirectToSignIn({ returnBackUrl: req.url })
+  if(!userId && !isPublicRoute(req)) {
+    return redirectToSignIn({ returnBackUrl: req.url })
   }
 
   return NextResponse.next()
