@@ -10,14 +10,14 @@ const app = new Hono()
   .use("*", sessionMiddleware)
   .get("/",
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
 
       const workspaces = await prisma.workspace.findMany({
         where: {
           members: {
             some: {
               userId: {
-                equals: userId
+                equals: id
               }
             }
           }
@@ -34,7 +34,7 @@ const app = new Hono()
       }
     }),
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
       const { name, imageUrl } = c.req.valid("form")
 
       const client = new Client()
@@ -70,7 +70,7 @@ const app = new Hono()
 
       await prisma.member.create({
         data: {
-          userId,
+          userId: id,
           role: "ADMIN",
           workspaceId: workspace.id
         },
@@ -80,7 +80,7 @@ const app = new Hono()
     })
   .get("/:workspaceId",
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
       const { workspaceId } = c.req.param()
 
       const workspace = await prisma.workspace.findUnique({
@@ -89,7 +89,7 @@ const app = new Hono()
           members: {
             some: {
               userId: {
-                equals: userId
+                equals: id
               }
             }
           }
@@ -99,7 +99,7 @@ const app = new Hono()
       const member = await prisma.member.findFirst({
         where: {
           workspaceId,
-          userId
+          userId: id
         },
         select: {
           role: true
@@ -120,13 +120,13 @@ const app = new Hono()
       }
     }),
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
       const { workspaceId } = c.req.param()
       const { name, imageUrl } = c.req.valid("form")
 
       const member = await prisma.member.findFirst({
         where: {
-          userId,
+          userId: id,
           workspaceId
         }
       })
@@ -176,7 +176,7 @@ const app = new Hono()
   )
   .patch("/join/:inviteCode",
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
       const { inviteCode } = c.req.param()
 
       const workspace = await prisma.workspace.findFirst({
@@ -191,7 +191,7 @@ const app = new Hono()
 
       await prisma.member.create({
         data: {
-          userId,
+          userId: id,
           workspaceId: workspace.id,
           role: "MEMBER"
         }
@@ -202,13 +202,13 @@ const app = new Hono()
   )
   .delete("/:workspaceId",
     async (c) => {
-      const userId = c.get("userId")
+      const { id } = c.get("user")
       const { workspaceId } = c.req.param()
 
       const member = await prisma.member.findFirst({
         where: {
           workspaceId,
-          userId
+          userId: id
         }
       })
 
