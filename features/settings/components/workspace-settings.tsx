@@ -1,18 +1,36 @@
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CopyIcon, Loader2 } from "lucide-react";
 import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
-import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form";
+import { useDeleteWorkspace } from "@/features/workspaces/api/use-delete-workspace";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form";
+import { useOpenWorkspaceSettingsModal } from "@/features/settings/hooks/use-open-workspace-settings-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export function WorkspaceSettings() {
 
+  const router = useRouter()
+
   const workspaceId = useWorkspaceId()
+  const { close } = useOpenWorkspaceSettingsModal()
   const { workspace, isLoadingWorkspace } = useGetWorkspace({ workspaceId })
+  const { deleteWorkspace, isDeletingWorkspace } = useDeleteWorkspace({ workspaceId })
 
   const fullInviteLink = `${window.location.origin}/${workspace?.id}/join/${workspace?.inviteCode}`
+
+  function handleDeleteWorkspace() {
+    deleteWorkspace({
+      param: { workspaceId }
+    }, {
+      onSuccess: () => {
+        close()
+        router.push("/dashboard")
+      }
+    })
+  }
 
   function handleCopyInviteLink() {
     navigator.clipboard.writeText(fullInviteLink).then(() => toast.success("Invite link copied to clipboard."))
@@ -50,6 +68,7 @@ export function WorkspaceSettings() {
               variant="outline"
               className="size-8"
               onClick={handleCopyInviteLink}
+              disabled={isDeletingWorkspace}
             >
               <CopyIcon className="size-5" />
             </Button>
@@ -63,9 +82,11 @@ export function WorkspaceSettings() {
         </CardHeader>
         <CardContent>
           <Button
+            onClick={handleDeleteWorkspace}
+            disabled={isDeletingWorkspace}
             variant="destructive"
           >
-            Delete workspace
+            Delete Workspace
           </Button>
         </CardContent>
       </Card>
