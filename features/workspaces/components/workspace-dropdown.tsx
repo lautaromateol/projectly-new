@@ -1,6 +1,6 @@
 "use client"
 import { Settings, User } from "lucide-react";
-import { UseGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { useOpenWorkspaceSettingsModal } from "@/features/settings/hooks/use-open-workspace-settings-modal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -10,7 +10,7 @@ import { WorskpaceBoard } from "./workspace-board";
 export function WorkspaceDropdown() {
 
   const workspaceId = useWorkspaceId()
-  const { workspace, isLoadingWorkspace } = UseGetWorkspace({ workspaceId })
+  const { workspace, isLoadingWorkspace } = useGetWorkspace({ workspaceId })
   const { open } = useOpenWorkspaceSettingsModal()
 
   if (isLoadingWorkspace || !workspace) {

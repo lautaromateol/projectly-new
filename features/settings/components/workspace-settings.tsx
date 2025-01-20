@@ -1,16 +1,16 @@
 import { toast } from "sonner";
 import { CopyIcon, Loader2 } from "lucide-react";
-import { UseGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form";
 
 export function WorkspaceSettings() {
 
   const workspaceId = useWorkspaceId()
-  const { workspace, isLoadingWorkspace } = UseGetWorkspace({ workspaceId })
+  const { workspace, isLoadingWorkspace } = useGetWorkspace({ workspaceId })
 
   const fullInviteLink = `${window.location.origin}/${workspace?.id}/join/${workspace?.inviteCode}`
 

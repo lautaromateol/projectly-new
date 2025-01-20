@@ -2,13 +2,13 @@ import { client } from "@/lib/client";
 import { useQuery } from "@tanstack/react-query";
 import { InferResponseType } from "hono";
 
-interface UseGetWorkspace {
+interface UseGetWorkspaceProps {
   workspaceId: string;
 }
 type ResponseType = InferResponseType<typeof client.api.workspaces[":workspaceId"]["$get"], 200>["data"]
 
 
-export function UseGetWorkspace({ workspaceId }: UseGetWorkspace) {
+export function useGetWorkspace({ workspaceId }: UseGetWorkspaceProps) {
   const { data: workspace, isLoading: isLoadingWorkspace } = useQuery<ResponseType, Error>({
     queryKey: ["workspace", { id: workspaceId }],
     queryFn: async () => {
