@@ -6,16 +6,12 @@ export default async function Page() {
 
   const { userId } = await auth()
 
-  if(!userId) {
-    redirect("/sign-in")
-  }
-
   const workspaces = await prisma.workspace.findMany({
     where: {
       members: {
         some: {
           userId: {
-            equals: userId
+            equals: userId!
           }
         }
       }
