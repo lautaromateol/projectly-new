@@ -1,20 +1,24 @@
+import { User } from "@clerk/backend";
 import { createMiddleware } from "hono/factory"
 
 interface SessionMiddleware {
   Variables: {
-    userId: string;
+    user: User;
   }
 }
 
 export const sessionMiddleware = createMiddleware<SessionMiddleware>(
-  async(c, next) => {
+  async (c, next) => {
     const user = c.get("clerkAuth")
+    const clerk = c.get("clerk")
 
-    if(!user || !user.userId) {
+    if (!user || !user.userId) {
       return c.json({ message: "Unauthorized" }, 401)
     }
 
-    c.set("userId", user.userId)
+    const fullUser = await clerk.users.getUser(user.userId)
+
+    c.set("user", fullUser)
 
     await next()
   }
