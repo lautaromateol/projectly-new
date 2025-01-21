@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { useRef } from "react"
 import { ImageIcon } from "lucide-react"
@@ -14,6 +15,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export function CreateWorkspaceForm() {
+
+  const router = useRouter()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -31,7 +34,10 @@ export function CreateWorkspaceForm() {
     createWorkspace({
       form: data
     }, {
-      onSuccess: () => close()
+      onSuccess: (data) => {
+        close()
+        router.push(`/dashboard/${data.id}`)
+      }
     })
   }
 
