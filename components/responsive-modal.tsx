@@ -7,7 +7,7 @@ interface ResponsiveModalProps {
   children: React.ReactNode;
   open: boolean;
   onOpenChange: ((open: boolean) => void) | undefined;
-  title: string;
+  title?: string;
   className?: string;
 }
 
@@ -19,9 +19,11 @@ export function ResponsiveModal({ children, onOpenChange, open, title, className
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className={cn(className)}>
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-          </DrawerHeader>
+          {title && (
+            <DrawerHeader>
+              <DrawerTitle>{title}</DrawerTitle>
+            </DrawerHeader>
+          )}
           {children}
         </DrawerContent>
       </Drawer>
@@ -31,9 +33,11 @@ export function ResponsiveModal({ children, onOpenChange, open, title, className
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(className)}>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
+        {title && (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        )}
         {children}
       </DialogContent>
     </Dialog>
