@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { WorkspaceMembersWrapper } from "@/features/members/components/workspace-members-wrapper"
 import { WorkspaceSettingsWrapper } from "@/features/settings/components/workspace-settings-wrapper"
 import { CreateWorkspaceFormWrapper } from "@/features/workspaces/components/create-workspace-form-wrapper"
+import { CreateProjectFormWrapper } from "@/features/projects/components/create-project-form-wrapper"
 
 export function ModalsProvider() {
 
@@ -18,6 +19,7 @@ export function ModalsProvider() {
         <CreateWorkspaceFormWrapper />
         <WorkspaceSettingsWrapper />
         <WorkspaceMembersWrapper />
+        <CreateProjectFormWrapper />
       </>
     )
   }
