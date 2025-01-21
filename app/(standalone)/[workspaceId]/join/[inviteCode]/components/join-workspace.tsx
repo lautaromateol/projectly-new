@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useJoinWorkspace } from "@/features/workspaces/api/use-join-workspace"
 import { WorkspaceAvatar } from "@/features/workspaces/components/workspace-avatar"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,6 +12,13 @@ interface JoinWorkspaceProps {
 }
 
 export function JoinWorkspace({ workspace }: JoinWorkspaceProps) {
+
+  const params = useParams()
+  const inviteCode = params.inviteCode as string
+
+  if (workspace.inviteCode !== inviteCode) {
+    throw new Error("Invalid Invite Code.")
+  }
 
   const router = useRouter()
 
