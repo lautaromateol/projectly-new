@@ -11,7 +11,7 @@ interface JoinWorkspacePageProps {
 
 export default async function JoinWorkspacePage({ params }: JoinWorkspacePageProps) {
 
-  const { workspaceId, inviteCode } = await params
+  const { workspaceId, inviteCode } = params
 
   const workspace = await prisma.workspace.findFirst({
     where: {
