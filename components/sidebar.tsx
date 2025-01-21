@@ -2,6 +2,7 @@ import { Workspaces } from "@/features/workspaces/components/workspaces";
 import { ProfileAvatar } from "./profile-avatar";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
+import { Projects } from "@/features/projects/components/projects";
 
 export function Sidebar() {
   return (
@@ -9,6 +10,7 @@ export function Sidebar() {
       <div className="space-y-6">
         <ProfileAvatar />
         <Workspaces />
+        <Projects />
       </div>
       <SignOutButton>
         <Button variant="secondary">
