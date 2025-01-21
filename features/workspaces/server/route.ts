@@ -34,7 +34,7 @@ const app = new Hono()
       }
     }),
     async (c) => {
-      const { id } = c.get("user")
+      const { id, fullName, hasImage, imageUrl: userImage } = c.get("user")
       const { name, imageUrl } = c.req.valid("form")
 
       const client = new Client()
@@ -72,7 +72,9 @@ const app = new Hono()
         data: {
           userId: id,
           role: "ADMIN",
-          workspaceId: workspace.id
+          workspaceId: workspace.id,
+          name: fullName!,
+          imageUrl: hasImage ? userImage : null
         },
       })
 
@@ -176,7 +178,7 @@ const app = new Hono()
   )
   .patch("/join/:inviteCode",
     async (c) => {
-      const { id } = c.get("user")
+      const { id, fullName, hasImage, imageUrl: userImage } = c.get("user")
       const { inviteCode } = c.req.param()
 
       const workspace = await prisma.workspace.findFirst({
@@ -193,7 +195,9 @@ const app = new Hono()
         data: {
           userId: id,
           workspaceId: workspace.id,
-          role: "MEMBER"
+          role: "MEMBER",
+          name: fullName!,
+          imageUrl: hasImage ? userImage : null
         }
       })
 
