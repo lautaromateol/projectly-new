@@ -32,7 +32,7 @@ export function useConfirm(
 
   function ConfirmationDialog() {
     return (
-      <ResponsiveModal open={promise !== null} onOpenChange={handleClose}>
+      <ResponsiveModal title="Confirm action" open={promise !== null} onOpenChange={handleClose} visuallyHidden className="p-0">
         <Card className="shadow-none border-0 size-full">
           <CardHeader>
             <CardTitle>{title}</CardTitle>
