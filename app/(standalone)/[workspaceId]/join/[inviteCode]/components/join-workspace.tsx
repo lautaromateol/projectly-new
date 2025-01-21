@@ -28,7 +28,7 @@ export function JoinWorkspace({ workspace }: JoinWorkspaceProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <Card>
         <CardHeader>
           <CardTitle>Join Workspace</CardTitle>
