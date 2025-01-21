@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { useGetProject } from "@/features/projects/api/use-get-project"
 import { ProjectAvatar } from "@/features/projects/components/project-avatar"
-import { ProjectDropdown } from "@/features/projects/components/projects-dropdown"
+import { ProjectDropdown } from "@/features/projects/components/project-dropdown"
 
 export default function ProjectIdPage() {
 
