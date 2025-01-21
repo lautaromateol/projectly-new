@@ -32,7 +32,8 @@ export function CreateWorkspaceForm() {
 
   function onSubmit(data: z.infer<typeof createWorkspaceSchema>) {
     createWorkspace({
-      form: data
+      ...data,
+      imageUrl: data.imageUrl instanceof File ? data.imageUrl : ""
     }, {
       onSuccess: (data) => {
         close()

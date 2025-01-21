@@ -33,11 +33,8 @@ export function UpdateWorkspaceForm({ workspace }: UpdateWorkspaceFormProps) {
 
   function onSubmit(data: z.infer<typeof updateWorskspaceSchema>) {
     updateWorkspace({
-      form: {
-        ...data,
-        imageUrl: data.imageUrl instanceof File ? data.imageUrl : ""
-      },
-      param: { workspaceId: workspace.id }
+      ...data,
+      imageUrl: data.imageUrl instanceof File ? data.imageUrl : ""
     })
   }
 
