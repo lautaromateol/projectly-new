@@ -28,6 +28,7 @@ export function WorkspaceDropdown() {
           <WorkspaceAvatar
             name={workspace.name}
             imageUrl={workspace.imageUrl ?? ""}
+            className="size-8"
           />
           <p className="font-medium text-sm">{workspace.name}</p>
         </div>
