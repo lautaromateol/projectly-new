@@ -24,7 +24,7 @@ export function WorkspaceAvatar({ name, imageUrl, className }: WorkspaceAvatarPr
       "flex items-center justify-center rounded-full bg-rose-700 text-white font-medium size-6",
       className
     )}>
-      {name.at(0)?.toLowerCase()}
+      {name.at(0)}
     </div>
   )
 }
