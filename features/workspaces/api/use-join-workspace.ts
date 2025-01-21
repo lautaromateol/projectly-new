@@ -24,7 +24,7 @@ export function useJoinWorkspace() {
       return data
     },
     onSuccess: (data) => {
-      toast.success(`You have joined ${data.name}`)
+      toast.success(`You have joined ${data.name}.`)
       queryClient.invalidateQueries({ queryKey: ["members", { workspaceId: data.id }] })
     },
     onError: (error) => toast.error(error.message)
