@@ -9,10 +9,17 @@ import { useOpenWorkspaceSettingsModal } from "@/features/settings/hooks/use-ope
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useConfirm } from "@/hooks/use-confirm";
 
 export function WorkspaceSettings() {
 
   const router = useRouter()
+
+  const [ConfirmationDialog, confirm] = useConfirm(
+    "Delete Workspace",
+    "Are you sure that you want to delete this workspace? This action is irreversible.",
+    "destructive"
+  )
 
   const workspaceId = useWorkspaceId()
   const { close } = useOpenWorkspaceSettingsModal()
@@ -21,15 +28,20 @@ export function WorkspaceSettings() {
 
   const fullInviteLink = `${window.location.origin}/${workspace?.id}/join/${workspace?.inviteCode}`
 
-  function handleDeleteWorkspace() {
-    deleteWorkspace({
-      param: { workspaceId }
-    }, {
-      onSuccess: () => {
-        close()
-        router.push("/dashboard")
-      }
-    })
+  async function handleDeleteWorkspace() {
+
+    const ok = await confirm()
+
+    if (ok) {
+      deleteWorkspace({
+        param: { workspaceId }
+      }, {
+        onSuccess: () => {
+          close()
+          router.push("/dashboard")
+        }
+      })
+    }
   }
 
   function handleCopyInviteLink() {
@@ -46,6 +58,7 @@ export function WorkspaceSettings() {
 
   return (
     <div className="space-y-4">
+      <ConfirmationDialog />
       <Card className="shadow-none">
         <CardHeader>
           <CardTitle>Update workspace</CardTitle>
