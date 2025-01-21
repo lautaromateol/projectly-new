@@ -4,6 +4,7 @@ import { WorkspaceMembersWrapper } from "@/features/members/components/workspace
 import { WorkspaceSettingsWrapper } from "@/features/settings/components/workspace-settings-wrapper"
 import { CreateWorkspaceFormWrapper } from "@/features/workspaces/components/create-workspace-form-wrapper"
 import { CreateProjectFormWrapper } from "@/features/projects/components/create-project-form-wrapper"
+import { UpdateProjectFormWrapper } from "@/features/projects/components/update-project-form-wrapper"
 
 export function ModalsProvider() {
 
@@ -20,6 +21,7 @@ export function ModalsProvider() {
         <WorkspaceSettingsWrapper />
         <WorkspaceMembersWrapper />
         <CreateProjectFormWrapper />
+        <UpdateProjectFormWrapper />
       </>
     )
   }
