@@ -5,7 +5,7 @@ import { useProjectId } from "@/features/projects/hooks/use-project-id";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { client } from "@/lib/client";
 
-type RequestType = InferRequestType<typeof client.api.projects[":projectId"]["$patch"]>
+type RequestType = InferRequestType<typeof client.api.projects[":projectId"]["$patch"]>["form"]
 type ResponseType = InferResponseType<typeof client.api.projects[":projectId"]["$patch"], 200>["data"]
 
 export function useUpdateProject() {
@@ -16,7 +16,7 @@ export function useUpdateProject() {
   const queryClient = useQueryClient()
 
   const { mutate: updateProject, isPending: isUpdatingProject } = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ form }) => {
+    mutationFn: async (form) => {
       const response = await client.api.projects[":projectId"]["$patch"]({
         form,
         param: { projectId },
