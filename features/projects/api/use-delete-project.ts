@@ -1,11 +1,10 @@
-import { InferRequestType, InferResponseType } from "hono";
+import { InferResponseType } from "hono";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useProjectId } from "@/features/projects/hooks/use-project-id";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { client } from "@/lib/client";
 
-type RequestType = InferRequestType<typeof client.api.projects[":projectId"]["$delete"]>
 type ResponseType = InferResponseType<typeof client.api.projects[":projectId"]["$delete"], 200>["data"]
 
 export function useDeleteProject() {
@@ -15,7 +14,7 @@ export function useDeleteProject() {
 
   const queryClient = useQueryClient()
 
-  const { mutate: deleteProject, isPending: isDeletingProject } = useMutation<ResponseType, Error, RequestType>({
+  const { mutate: deleteProject, isPending: isDeletingProject } = useMutation<ResponseType, Error>({
     mutationFn: async () => {
       const response = await client.api.projects[":projectId"]["$delete"]({
         param: { projectId },
