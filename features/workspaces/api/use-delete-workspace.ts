@@ -1,12 +1,15 @@
 import { InferRequestType, InferResponseType } from "hono";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { client } from "@/lib/client";
 
 type RequestType = InferRequestType<typeof client.api.workspaces[":workspaceId"]["$delete"]>
 type ResponseType = InferResponseType<typeof client.api.workspaces[":workspaceId"]["$delete"], 200>["data"]
 
-export function useDeleteWorkspace({ workspaceId }: { workspaceId: string; }) {
+export function useDeleteWorkspace() {
+  const workspaceId = useWorkspaceId()
+  
   const queryClient = useQueryClient()
 
   const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } = useMutation<ResponseType, Error, RequestType>({

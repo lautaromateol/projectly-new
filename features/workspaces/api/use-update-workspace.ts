@@ -1,12 +1,15 @@
 import { InferRequestType, InferResponseType } from "hono";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { client } from "@/lib/client";
 
 type RequestType = InferRequestType<typeof client.api.workspaces[":workspaceId"]["$patch"]>
 type ResponseType = InferResponseType<typeof client.api.workspaces[":workspaceId"]["$patch"], 200>["data"]
 
-export function useUpdateWorkspace({ workspaceId }: { workspaceId: string; }) {
+export function useUpdateWorkspace() {
+  const workspaceId = useWorkspaceId()
+  
   const queryClient = useQueryClient()
 
   const { mutate: updateWorkspace, isPending: isUpdatingWorkspace } = useMutation<ResponseType, Error, RequestType>({

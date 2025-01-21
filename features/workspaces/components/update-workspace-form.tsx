@@ -29,7 +29,7 @@ export function UpdateWorkspaceForm({ workspace }: UpdateWorkspaceFormProps) {
     resolver: zodResolver(updateWorskspaceSchema)
   })
 
-  const { updateWorkspace, isUpdatingWorkspace } = useUpdateWorkspace({ workspaceId: workspace.id })
+  const { updateWorkspace, isUpdatingWorkspace } = useUpdateWorkspace()
 
   function onSubmit(data: z.infer<typeof updateWorskspaceSchema>) {
     updateWorkspace({

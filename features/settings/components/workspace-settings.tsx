@@ -23,8 +23,8 @@ export function WorkspaceSettings() {
 
   const workspaceId = useWorkspaceId()
   const { close } = useOpenWorkspaceSettingsModal()
-  const { workspace, isLoadingWorkspace } = useGetWorkspace({ workspaceId })
-  const { deleteWorkspace, isDeletingWorkspace } = useDeleteWorkspace({ workspaceId })
+  const { workspace, isLoadingWorkspace } = useGetWorkspace()
+  const { deleteWorkspace, isDeletingWorkspace } = useDeleteWorkspace()
 
   const fullInviteLink = `${window.location.origin}/${workspace?.id}/join/${workspace?.inviteCode}`
 
