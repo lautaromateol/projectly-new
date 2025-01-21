@@ -3,14 +3,16 @@ import { prisma } from "@/lib/prisma"
 import { JoinWorkspace } from "./components/join-workspace"
 
 interface JoinWorkspacePageProps {
-  params: Record<string, string>
+  params: Promise<{
+    workspaceId: string
+    inviteCode: string
+  }>
 }
 
 
 export default async function JoinWorkspacePage({ params }: JoinWorkspacePageProps) {
 
-  const workspaceId = params.workspaceId as string
-  const inviteCode = params.inviteCode as string
+  const { inviteCode, workspaceId } = await params
 
   const workspace = await prisma.workspace.findFirst({
     where: {
