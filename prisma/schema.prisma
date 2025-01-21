@@ -36,5 +36,6 @@ model Project {
   id          String    @id @default(uuid())
   name        String
   workspaceId String
+  imageUrl    String?
   worskpace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
