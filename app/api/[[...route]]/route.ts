@@ -1,13 +1,15 @@
-import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
+import { Hono } from 'hono';
+import { handle } from 'hono/vercel';
 import { clerkMiddleware } from "@hono/clerk-auth";
-import workspaces from "@/features/workspaces/server/route"
+import workspaces from "@/features/workspaces/server/route";
+import members from "@/features/members/server/route";
 
 export const runtime = 'edge'
 
 const app = new Hono().basePath('/api')
   .use("*", clerkMiddleware())
   .route("/workspaces", workspaces)
+  .route("/members", members)
 
 export const GET = handle(app)
 export const POST = handle(app)
