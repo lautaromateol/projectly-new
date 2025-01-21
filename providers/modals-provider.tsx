@@ -1,7 +1,8 @@
 "use client"
+import { useEffect, useState } from "react"
+import { WorkspaceMembersWrapper } from "@/features/members/components/workspace-members-wrapper"
 import { WorkspaceSettingsWrapper } from "@/features/settings/components/workspace-settings-wrapper"
 import { CreateWorkspaceFormWrapper } from "@/features/workspaces/components/create-workspace-form-wrapper"
-import { useEffect, useState } from "react"
 
 export function ModalsProvider() {
 
@@ -16,6 +17,7 @@ export function ModalsProvider() {
       <>
         <CreateWorkspaceFormWrapper />
         <WorkspaceSettingsWrapper />
+        <WorkspaceMembersWrapper />
       </>
     )
   }
