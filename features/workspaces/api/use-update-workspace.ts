@@ -4,16 +4,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { client } from "@/lib/client";
 
-type RequestType = InferRequestType<typeof client.api.workspaces[":workspaceId"]["$patch"]>
+type RequestType = InferRequestType<typeof client.api.workspaces[":workspaceId"]["$patch"]>["form"]
 type ResponseType = InferResponseType<typeof client.api.workspaces[":workspaceId"]["$patch"], 200>["data"]
 
 export function useUpdateWorkspace() {
   const workspaceId = useWorkspaceId()
-  
+
   const queryClient = useQueryClient()
 
   const { mutate: updateWorkspace, isPending: isUpdatingWorkspace } = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ form }) => {
+    mutationFn: async (form) => {
       const response = await client.api.workspaces[":workspaceId"]["$patch"]({
         form,
         param: { workspaceId }

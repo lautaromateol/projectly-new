@@ -3,14 +3,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { client } from "@/lib/client";
 
-type RequestType = InferRequestType<typeof client.api.workspaces.$post>
+type RequestType = InferRequestType<typeof client.api.workspaces.$post>["form"]
 type ResponseType = InferResponseType<typeof client.api.workspaces.$post, 200>["data"]
 
 export function useCreateWorkspace() {
   const queryClient = useQueryClient()
 
   const { mutate: createWorkspace, isPending: isCreatingWorkspace } = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async({ form }) => {
+    mutationFn: async(form) => {
       const response = await client.api.workspaces.$post({
         form
       })
