@@ -18,7 +18,10 @@ export function ResponsiveModal({ children, onOpenChange, open, title, className
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className={cn(className)}>
+        <DrawerContent className={cn(
+          "p-4",
+          className
+        )}>
           {title && (
             <DrawerHeader>
               <DrawerTitle>{title}</DrawerTitle>
