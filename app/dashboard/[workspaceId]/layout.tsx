@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
       <div className="lg:pl-64 flex flex-col w-full">
         <NavBar />
-        <main className="flex-1 p-4">
+        <main className="flex-1 p-8">
           {children}
         </main>
       </div>
