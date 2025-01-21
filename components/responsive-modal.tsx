@@ -2,16 +2,18 @@ import { useIsMobile } from "@/hooks/use-is-mobile"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface ResponsiveModalProps {
   children: React.ReactNode;
   open: boolean;
   onOpenChange: ((open: boolean) => void) | undefined;
-  title?: string;
+  title: string;
+  visuallyHidden?: boolean;
   className?: string;
 }
 
-export function ResponsiveModal({ children, onOpenChange, open, title, className }: ResponsiveModalProps) {
+export function ResponsiveModal({ children, onOpenChange, open, title, visuallyHidden, className }: ResponsiveModalProps) {
 
   const isMobile = useIsMobile()
 
@@ -22,7 +24,11 @@ export function ResponsiveModal({ children, onOpenChange, open, title, className
           "p-4",
           className
         )}>
-          {title && (
+          {visuallyHidden ? (
+            <VisuallyHidden>
+              <DrawerTitle>{title}</DrawerTitle>
+            </VisuallyHidden>
+          ) : (
             <DrawerHeader>
               <DrawerTitle>{title}</DrawerTitle>
             </DrawerHeader>
@@ -36,7 +42,11 @@ export function ResponsiveModal({ children, onOpenChange, open, title, className
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(className)}>
-        {title && (
+        {visuallyHidden ? (
+          <VisuallyHidden>
+            <DialogTitle>{title}</DialogTitle>
+          </VisuallyHidden>
+        ) : (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
