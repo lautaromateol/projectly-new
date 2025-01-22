@@ -30,6 +30,8 @@ model Member {
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   role        Role
+  tasks       Task[]
+  comments    Comment[]
 }
 
 model Project {
@@ -38,4 +40,42 @@ model Project {
   workspaceId String
   imageUrl    String?
   worskpace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+}
+
+enum TaskStatus {
+  TO_DO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+  OVERDUE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Task {
+  id          String        @id @default(uuid())
+  name        String
+  description String
+  dueDate     DateTime
+  status      TaskStatus
+  priority    TaskPriority?
+  projectId   String
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  memberId    String
+  member      Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+}
+
+model Comment {
+  id       String @id @default(uuid())
+  content  String
+  taskId   String
+  task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 }
