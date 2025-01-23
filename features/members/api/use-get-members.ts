@@ -1,14 +1,15 @@
-import { client } from "@/lib/client";
-import { useQuery } from "@tanstack/react-query";
 import { InferResponseType } from "hono";
+import { useQuery } from "@tanstack/react-query";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { client } from "@/lib/client";
 
-interface UserGetMembersProps {
-  workspaceId: string;
-}
 
 type ResponseType = InferResponseType<typeof client.api.members[":workspaceId"]["$get"], 200>["data"]
 
-export function useGetMembers({ workspaceId }: UserGetMembersProps) {
+export function useGetMembers() {
+
+  const workspaceId = useWorkspaceId()
+
   const { data: members, isLoading: isLoadingMembers } = useQuery<ResponseType, Error>({
     queryKey: ["members", { workspaceId }],
     queryFn: async() => {
