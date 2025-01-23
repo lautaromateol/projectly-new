@@ -3,11 +3,12 @@ import { InferResponseType } from "hono"
 import { format } from "date-fns"
 import { ColumnDef } from "@tanstack/react-table"
 import { TaskPriority, TaskStatus } from "@prisma/client/edge"
+import { MemberAvatar } from "@/features/members/components/member-avatar"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
-import { MemberAvatar } from "@/features/members/components/member-avatar"
 import { client } from "@/lib/client"
 import { cn, snakeCaseToTitleCase } from "@/lib/utils"
+import { TaskDropdown } from "./task-dropdown"
 
 type Task = InferResponseType<typeof client.api.tasks["$get"], 200>["data"][0]
 
@@ -103,6 +104,17 @@ export const columns: ColumnDef<Task>[] = [
           "text-sm font-medium",
           priority === TaskPriority.HIGH ? "text-rose-500" : priority === TaskPriority.MEDIUM ? "text-amber-500" : "text-emerald-500"
         )}>{snakeCaseToTitleCase(TaskPriority[priority])}</p>
+      )
+    }
+  },
+  {
+    accessorKey: "id",
+    header: "Actions",
+    cell: ({ row }) => {
+      const taskId = row.getValue("id") as string
+
+      return(
+        <TaskDropdown taskId={taskId} />
       )
     }
   }
