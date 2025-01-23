@@ -1,4 +1,4 @@
-import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-project-modal";
+import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-task-modal";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { CreateTaskForm } from "./create-task-form";
 

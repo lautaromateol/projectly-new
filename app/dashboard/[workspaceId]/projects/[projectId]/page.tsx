@@ -2,7 +2,7 @@
 import { notFound } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { TasksTabs } from "@/features/tasks/components/tasks-tabs"
-import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-project-modal";
+import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-task-modal";
 import { useGetProject } from "@/features/projects/api/use-get-project"
 import { ProjectAvatar } from "@/features/projects/components/project-avatar"
 import { ProjectDropdown } from "@/features/projects/components/project-dropdown"
