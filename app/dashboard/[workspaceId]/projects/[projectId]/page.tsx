@@ -1,13 +1,18 @@
 "use client"
 import { notFound } from "next/navigation"
 import { Loader2 } from "lucide-react"
+import { TasksTabs } from "@/features/tasks/components/tasks-tabs"
+import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-project-modal";
 import { useGetProject } from "@/features/projects/api/use-get-project"
 import { ProjectAvatar } from "@/features/projects/components/project-avatar"
 import { ProjectDropdown } from "@/features/projects/components/project-dropdown"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
 
 export default function ProjectIdPage() {
 
   const { project, isLoadingProject } = useGetProject()
+  const { open } = useCreateTaskModal()
 
   if (isLoadingProject) {
     return <div className="flex items-center justify-center min-h-screen">
@@ -32,6 +37,9 @@ export default function ProjectIdPage() {
           <ProjectDropdown />
         </div>
       </div>
+      <Separator className="w-full mx-auto" />
+      <TasksTabs />
+      <Button variant="secondary" onClick={open}>Create Task</Button>
     </div>
   )
 }
