@@ -72,10 +72,11 @@ model Task {
 }
 
 model Comment {
-  id       String @id @default(uuid())
-  content  String
-  taskId   String
-  task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  memberId String
-  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  content   String
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
