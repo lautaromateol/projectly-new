@@ -1,14 +1,12 @@
 import { Loader2 } from "lucide-react";
 import { useGetMembers } from "@/features/members/api/use-get-members";
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { MemberAvatar } from "./member-avatar";
 import { MemberDropdown } from "./member-dropdown";
 import { useUser } from "@clerk/nextjs";
 
 export function WorkspaceMembers() {
 
-  const workspaceId = useWorkspaceId()
-  const { members, isLoadingMembers } = useGetMembers({ workspaceId })
+  const { members, isLoadingMembers } = useGetMembers()
 
   const { user } = useUser()
 
