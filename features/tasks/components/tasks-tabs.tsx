@@ -1,0 +1,48 @@
+"use client"
+import { DataTable } from "@/components/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
+import { columns } from "./columns";
+import { useConfirm } from "@/hooks/use-confirm";
+import { useDeleteTasks } from "../api/use-delete-tasks";
+
+export function TasksTabs() {
+
+  const { tasks, isLoadingTasks } = useGetTasks()
+
+  const { deleteTasks, isDeletingTasks } = useDeleteTasks()
+
+  const [ConfirmDelete, confirm] = useConfirm(
+    "Delete Tasks",
+    "Are you sure that you want to delete this tasks? This action is irreversible.",
+    "destructive"
+  )
+
+  return (
+    <Tabs defaultValue="table">
+      <ConfirmDelete />
+      <TabsList>
+        <TabsTrigger value="table">Table</TabsTrigger>
+      </TabsList>
+      <TabsContent value="table">
+        <DataTable
+          filterKey="name"
+          columns={columns}
+          data={tasks ?? []}
+          disabled={isLoadingTasks || isDeletingTasks}
+          onDelete={async (rows, setSelectedRows) => {
+            const ok = await confirm()
+
+            if (ok) {
+              const ids = rows.map((row) => row.original.id)
+
+              deleteTasks({ ids }, {
+                onSuccess: () => setSelectedRows({})
+              })
+            }
+          }}
+        />
+      </TabsContent>
+    </Tabs>
+  )
+}
