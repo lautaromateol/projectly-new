@@ -138,6 +138,14 @@ const app = new Hono()
       const task = await prisma.task.findUnique({
         where: {
           id: taskId
+        },
+        include: {
+          member: {
+            select: {
+              name: true,
+              imageUrl: true
+            }
+          }
         }
       })
 
