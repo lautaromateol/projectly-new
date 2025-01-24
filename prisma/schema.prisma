@@ -9,12 +9,13 @@ datasource db {
 }
 
 model Workspace {
-  id         String    @id @default(uuid())
-  name       String
-  imageUrl   String?
-  inviteCode String
-  members    Member[]
-  projects   Project[]
+  id           String        @id @default(uuid())
+  name         String
+  imageUrl     String?
+  inviteCode   String
+  members      Member[]
+  projects     Project[]
+  activityLogs ActivityLog[]
 }
 
 enum Role {
@@ -23,15 +24,16 @@ enum Role {
 }
 
 model Member {
-  id          String    @id @default(uuid())
-  userId      String
-  name        String
-  imageUrl    String?
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  role        Role
-  tasks       Task[]
-  comments    Comment[]
+  id           String        @id @default(uuid())
+  userId       String
+  name         String
+  imageUrl     String?
+  workspaceId  String
+  workspace    Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role         Role
+  tasks        Task[]
+  comments     Comment[]
+  activityLogs ActivityLog[]
 }
 
 model Project {
@@ -58,17 +60,18 @@ enum TaskPriority {
 }
 
 model Task {
-  id          String        @id @default(uuid())
-  name        String
-  description String
-  dueDate     DateTime
-  status      TaskStatus
-  priority    TaskPriority?
-  projectId   String
-  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  memberId    String?
-  member      Member?       @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  comments    Comment[]
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  dueDate      DateTime
+  status       TaskStatus
+  priority     TaskPriority?
+  projectId    String
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  memberId     String?
+  member       Member?       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  comments     Comment[]
+  activityLogs ActivityLog[]
 }
 
 model Comment {
@@ -79,4 +82,22 @@ model Comment {
   memberId  String
   member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+enum Action {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model ActivityLog {
+  id          String    @id @default(uuid())
+  action      Action
+  memberId    String
+  member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  taskId      String
+  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  workspaceId String
+  worskpace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
 }
