@@ -33,6 +33,7 @@ export function useUpdateTask({ taskId }: { taskId: string }) {
       toast.success(`${data.name} updated.`)
       queryClient.invalidateQueries({ queryKey: ["tasks", { projectId }] })
       queryClient.invalidateQueries({ queryKey: ["task", { id: data.id }] })
+      queryClient.invalidateQueries({ queryKey: ["activity-logs", { taskId: data.id }] })
     },
     onError: (error) => toast.error(error.message)
   })
