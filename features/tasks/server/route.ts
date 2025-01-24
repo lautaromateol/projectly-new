@@ -216,7 +216,7 @@ const app = new Hono()
       const keys = Object.keys(c.req.valid("json"))
       const onlyStatus = keys.length === 1 && keys[0] === 'status'
 
-      if (onlyStatus) {
+      if (!onlyStatus) {
         await prisma.activityLog.create({
           data: {
             action: "UPDATE",
