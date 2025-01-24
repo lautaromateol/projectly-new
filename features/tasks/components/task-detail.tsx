@@ -3,6 +3,7 @@ import { InferResponseType } from "hono";
 import { CircleAlert, CircleDotDashedIcon, UserIcon } from "lucide-react";
 import { TaskPriority, TaskStatus } from "@prisma/client/edge";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
+import { TaskActivityLogs } from "@/features/activity-logs/components/task-activity-logs";
 import { cn, snakeCaseToTitleCase } from "@/lib/utils";
 import { client } from "@/lib/client";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +42,7 @@ export function TaskDetail({ task }: { task: Task }) {
         <TaskDescription task={task} />
         <TaskCommentSection taskId={task.id} />
       </div>
-      <div className="col-span-2">
+      <div className="space-y-12 col-span-2">
         <div className="border border-slate-200 rounded w-full">
           <div className="p-3 text-sm font-semibold text-muted-foreground border-b">Details</div>
           <div className="flex flex-col gap-y-2">
@@ -73,6 +74,7 @@ export function TaskDetail({ task }: { task: Task }) {
             </div>
           </div>
         </div>
+        <TaskActivityLogs taskId={task.id} />
       </div>
     </div>
   )
