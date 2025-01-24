@@ -1,3 +1,4 @@
+import { Action } from "@prisma/client/edge"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -9,8 +10,8 @@ export function generateInviteCode(length: number) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
   let result = ""
-  
-  for(let i = 0; i < length; i++){
+
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length))
   }
 
@@ -19,4 +20,22 @@ export function generateInviteCode(length: number) {
 
 export function snakeCaseToTitleCase(str: string) {
   return str.toLowerCase().replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+export function generateLogMessage({ action, taskTitle }: { action: Action, taskTitle: string }) {
+
+  switch (action) {
+    case Action.CREATE:
+      return `created task "${taskTitle}"`
+
+    case Action.UPDATE:
+      return `updated task "${taskTitle}"`
+
+    case Action.DELETE:
+      return `deleted task "${taskTitle}"`
+
+    default:
+      return `uknown action task "${taskTitle}"`
+
+  }
 }
