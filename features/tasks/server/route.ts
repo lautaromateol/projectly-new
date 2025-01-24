@@ -101,6 +101,15 @@ const app = new Hono()
         }
       })
 
+      await prisma.activityLog.create({
+        data: {
+          action: "CREATE",
+          memberId: member.id,
+          taskId: task.id,
+          workspaceId: member.workspaceId
+        }
+      })
+
       return c.json({ data: task }, 200)
     })
   .get("/:taskId",
@@ -204,6 +213,20 @@ const app = new Hono()
         }
       })
 
+      const keys = Object.keys(c.req.valid("json"))
+      const onlyStatus = keys.length === 1 && keys[0] === 'status'
+
+      if (onlyStatus) {
+        await prisma.activityLog.create({
+          data: {
+            action: "UPDATE",
+            memberId: member.id,
+            taskId: task.id,
+            workspaceId: member.workspaceId
+          }
+        })
+      }
+
       return c.json({ data: task }, 200)
     }
   )
@@ -242,6 +265,15 @@ const app = new Hono()
       const task = await prisma.task.delete({
         where: {
           id: taskId
+        }
+      })
+
+      await prisma.activityLog.create({
+        data: {
+          action: "DELETE",
+          memberId: member.id,
+          taskId: task.id,
+          workspaceId: member.workspaceId
         }
       })
 
