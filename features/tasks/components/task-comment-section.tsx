@@ -65,7 +65,7 @@ export function TaskCommentSection({ taskId }: { taskId: string }) {
                 onClick={handleSave}
                 disabled={isCreatingComment}
               >
-                Save Changes
+                Submit Comment
               </Button>
             </div>
           </div>
