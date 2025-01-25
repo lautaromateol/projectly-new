@@ -6,7 +6,7 @@ import { client } from "@/lib/client";
 type ResponseType = InferResponseType<typeof client.api.tasks[":taskId"]["$get"], 200>["data"]
 
 
-export function useGetTask({ taskId }: { taskId: string }) {
+export function useGetTask({ taskId }: { taskId?: string }) {
 
   const projectId = useProjectId()
 
