@@ -4,10 +4,14 @@ import { useUpdateTaskModal } from "@/features/tasks/hooks/use-update-task-modal
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { UpdateTaskForm } from "./update-task-form";
 
-export function UpdateTaskFormWrapper({ taskId }: { taskId: string }) {
+export function UpdateTaskFormWrapper() {
 
-  const { isOpen, close } = useUpdateTaskModal()
-  const { task, isLoadingTask } = useGetTask({ taskId })
+  const { id, isOpen, close } = useUpdateTaskModal()
+  const { task, isLoadingTask } = useGetTask({ taskId: id })
+
+  if (!id) {
+    return null
+  }
 
   return (
     <ResponsiveModal title="Update Task" open={isOpen} onOpenChange={close}>

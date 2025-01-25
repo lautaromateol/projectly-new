@@ -7,6 +7,7 @@ import { CreateProjectFormWrapper } from "@/features/projects/components/create-
 import { UpdateProjectFormWrapper } from "@/features/projects/components/update-project-form-wrapper"
 import { CreateTaskFormWrapper } from "@/features/tasks/components/create-task-form-wrapper"
 import { TaskDetailWrapper } from "@/features/tasks/components/task-detail-wrapper"
+import { UpdateTaskFormWrapper } from "@/features/tasks/components/update-task-form-wrapper"
 
 export function ModalsProvider() {
 
@@ -26,6 +27,7 @@ export function ModalsProvider() {
         <UpdateProjectFormWrapper />
         <CreateTaskFormWrapper />
         <TaskDetailWrapper />
+        <UpdateTaskFormWrapper />
       </>
     )
   }

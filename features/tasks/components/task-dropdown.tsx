@@ -5,7 +5,6 @@ import { useTaskDetailModal } from "@/features/tasks/hooks/use-task-detail-modal
 import { useConfirm } from "@/hooks/use-confirm";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UpdateTaskFormWrapper } from "./update-task-form-wrapper";
 
 export function TaskDropdown({ taskId }: { taskId: string }) {
 
@@ -30,14 +29,13 @@ export function TaskDropdown({ taskId }: { taskId: string }) {
   return (
     <DropdownMenu>
       <ConfirmationDialog />
-      <UpdateTaskFormWrapper taskId={taskId} />
       <DropdownMenuTrigger asChild>
         <Button variant="ghost">
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={open} className="cursor-pointer" disabled={isDeletingTask}>
+        <DropdownMenuItem onClick={() => open(taskId)} className="cursor-pointer" disabled={isDeletingTask}>
           <div className="flex items-center gap-x-2">
             <Pencil className="size-4 text-muted-foreground" />
             <p className="text-sm text-muted-foreground font-medium">Edit</p>

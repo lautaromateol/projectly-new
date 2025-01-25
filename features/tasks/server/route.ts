@@ -185,6 +185,7 @@ const app = new Hono()
     }
   )
   .patch("/:taskId",
+    zValidator("param", z.object({ taskId: z.string().optional() })),
     zValidator("json", updateTaskSchema, (result, c) => {
       if (!result.success) {
         return c.json({ message: "Invalid data." }, 400)
@@ -194,8 +195,8 @@ const app = new Hono()
     async (c) => {
       const { name, description, dueDate, priority, status, position, memberId } = c.req.valid("json")
       const { projectId } = c.req.valid("query")
+      const { taskId } = c.req.valid("param")
       const { id } = c.get("user")
-      const { taskId } = c.req.param()
 
       const member = await prisma.member.findFirst({
         where: {

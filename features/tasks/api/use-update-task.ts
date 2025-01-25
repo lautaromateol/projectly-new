@@ -7,7 +7,7 @@ import { client } from "@/lib/client";
 type RequestType = InferRequestType<typeof client.api.tasks[":taskId"]["$patch"]>["json"]
 type ResponseType = InferResponseType<typeof client.api.tasks[":taskId"]["$patch"], 200>["data"]
 
-export function useUpdateTask({ taskId }: { taskId: string }) {
+export function useUpdateTask({ taskId }: { taskId?: string }) {
 
   const projectId = useProjectId()
 
