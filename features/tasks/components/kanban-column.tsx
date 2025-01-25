@@ -1,9 +1,10 @@
+import { CircleCheckIcon, CircleDashedIcon, CircleDotDashedIcon, CircleDotIcon, CircleIcon } from "lucide-react";
 import { InferResponseType } from "hono";
 import { TaskStatus } from "@prisma/client/edge";
+import { Draggable, Droppable } from "@hello-pangea/dnd"
 import { client } from "@/lib/client";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { KanbanTask } from "./kanban-task";
-import { CircleCheckIcon, CircleDashedIcon, CircleDotDashedIcon, CircleDotIcon, CircleIcon } from "lucide-react";
 
 type Tasks = InferResponseType<typeof client.api.tasks["$get"], 200>["data"]
 
@@ -40,11 +41,22 @@ export function KanbanColumn({ status, tasks }: KanbanColumnProps) {
         {icon}
         <p className="text-sm font-semibold text-slate-800">{snakeCaseToTitleCase(status)}</p>
       </div>
-      <div className="space-y-1 py-2">
-        {tasks.map((task) => (
-          <KanbanTask task={task} key={task.id} />
-        ))}
-      </div>
+      <Droppable droppableId={status}>
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-1 py-2">
+            {tasks.map((task, i) => (
+              <Draggable key={task.id} draggableId={task.id} index={i}>
+                {(provided) => (
+                  <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                    <KanbanTask task={task} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   )
 }
