@@ -4,10 +4,14 @@ import { useTaskDetailModal } from "@/features/tasks/hooks/use-task-detail-modal
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { TaskDetail } from "./task-detail";
 
-export function TaskDetailWrapper({ taskId }: { taskId: string }) {
+export function TaskDetailWrapper() {
 
-  const { isOpen, close } = useTaskDetailModal()
-  const { task, isLoadingTask } = useGetTask({ taskId })
+  const { id, isOpen, close } = useTaskDetailModal()
+  const { task, isLoadingTask } = useGetTask({ taskId: id })
+
+  if(!id) {
+    return null
+  }
 
   return (
     <ResponsiveModal title="Task Detail" open={isOpen} onOpenChange={close} visuallyHidden className="max-w-screen-xl min-h-[600px]">
