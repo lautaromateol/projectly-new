@@ -5,6 +5,7 @@ import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
 import { columns } from "./columns";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteTasks } from "../api/use-delete-tasks";
+import { DataKanban } from "./data-kanban";
 
 export function TasksTabs() {
 
@@ -23,6 +24,7 @@ export function TasksTabs() {
       <ConfirmDelete />
       <TabsList>
         <TabsTrigger value="table">Table</TabsTrigger>
+        <TabsTrigger value="kanban">Kanban</TabsTrigger>
       </TabsList>
       <TabsContent value="table">
         <DataTable
@@ -42,6 +44,9 @@ export function TasksTabs() {
             }
           }}
         />
+      </TabsContent>
+      <TabsContent value="kanban">
+        <DataKanban tasks={tasks ?? []} />
       </TabsContent>
     </Tabs>
   )
