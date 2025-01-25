@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator"
+import { TaskStatus } from "@prisma/client/edge";
 import { createTaskSchema, updateTaskSchema } from "@/features/tasks/schemas";
 import { sessionMiddleware } from "@/lib/session-middleware";
 import { prisma } from "@/lib/prisma";
@@ -339,7 +340,61 @@ const app = new Hono()
         }
       })
 
-      return c.json({ message: `${data.count} accounts deleted successfully.` }, 200)
+      return c.json({ message: `${data.count} tasks deleted successfully.` }, 200)
+    }
+  )
+  .patch("/bulk-update/:projectId",
+    zValidator("json", z.object({
+      tasks:
+        z.array(z.object({
+          id: z.string(),
+          status: z.nativeEnum(TaskStatus),
+          position: z.number()
+        }))
+    }), (result, c) => {
+      if (!result.success) {
+        return c.json({ message: "Invalid data." }, 400)
+      }
+    }),
+    async (c) => {
+      const { id } = c.get("user")
+      const { tasks } = c.req.valid("json")
+      const { projectId } = c.req.param()
+
+      const member = await prisma.member.findFirst({
+        where: {
+          workspace: {
+            projects: {
+              some: {
+                id: {
+                  equals: projectId
+                }
+              }
+            }
+          },
+          userId: {
+            equals: id
+          }
+        }
+      })
+
+      if (!member) {
+        return c.json({ message: "Unauthorized." }, 401)
+      }
+
+      await Promise.all(
+        tasks.map((task) => prisma.task.update({
+          where: {
+            id: task.id
+          },
+          data: {
+            status: task.status,
+            position: task.position
+          }
+        }))
+      )
+
+      return c.json({ message: `${tasks.length} tasks updated successfully.` }, 200)
     }
   )
 
