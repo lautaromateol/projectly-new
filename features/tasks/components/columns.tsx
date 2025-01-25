@@ -1,4 +1,5 @@
 "use client"
+import { User } from "lucide-react"
 import { InferResponseType } from "hono"
 import { format } from "date-fns"
 import { ColumnDef } from "@tanstack/react-table"
@@ -41,7 +42,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const name = row.getValue("name") as string
 
-      return(
+      return (
         <p className="text-sm font-semibold">{name}</p>
       )
     }
@@ -53,13 +54,18 @@ export const columns: ColumnDef<Task>[] = [
       const task = row.original
       const member = task.member
 
-      if(!member) {
-        return(
-          <p className="text-muted-foreground text-sm uppercase italic">This password isn&apos;t assigned to any user.</p>
+      if (!member) {
+        return (
+          <div className="flex items-center gap-x-2">
+            <div className="grid place-content-center rounded-full bg-slate-200 p-2 size-6">
+              <User className="text-muted-foreground size-4" />
+            </div>
+            <p className="text-muted-foreground text-sm">Unassigned</p>
+          </div>
         )
       }
 
-      return(
+      return (
         <div className="flex items-center gap-x-2">
           <MemberAvatar
             name={member.name}
@@ -77,7 +83,7 @@ export const columns: ColumnDef<Task>[] = [
       const dueDate = row.getValue("dueDate") as string
       const formattedDate = format(new Date(dueDate), "PPP")
 
-      return(
+      return (
         <p className="text-sm font-medium">{formattedDate}</p>
       )
     }
@@ -88,7 +94,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const status = row.getValue("status") as TaskStatus
 
-      return(
+      return (
         <Badge variant={TaskStatus[status]}>{snakeCaseToTitleCase(TaskStatus[status])}</Badge>
       )
     }
@@ -99,7 +105,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const priority = row.getValue("priority") as TaskPriority
 
-      return(
+      return (
         <p className={cn(
           "text-sm font-medium",
           priority === TaskPriority.HIGH ? "text-rose-500" : priority === TaskPriority.MEDIUM ? "text-amber-500" : "text-emerald-500"
@@ -113,7 +119,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const taskId = row.getValue("id") as string
 
-      return(
+      return (
         <TaskDropdown taskId={taskId} />
       )
     }
