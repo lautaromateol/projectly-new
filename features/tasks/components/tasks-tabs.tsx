@@ -46,7 +46,7 @@ export function TasksTabs() {
         />
       </TabsContent>
       <TabsContent value="kanban">
-        <DataKanban tasks={tasks ?? []} />
+        <DataKanban data={tasks ?? []} />
       </TabsContent>
     </Tabs>
   )
