@@ -10,7 +10,7 @@ export const createTaskSchema = z.object({
   }),
   dueDate: z.coerce.date({ required_error: "Insert task due date." }),
   status: z.nativeEnum(TaskStatus),
-  priority: z.nativeEnum(TaskPriority),
+  priority: z.nativeEnum(TaskPriority).optional(),
   memberId: z.string().optional()
 })
 
