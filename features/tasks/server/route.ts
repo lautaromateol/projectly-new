@@ -89,6 +89,22 @@ const app = new Hono()
         return c.json({ message: "Unauthorized" }, 401)
       }
 
+      const lastTask = await prisma.task.findFirst({
+        where: {
+          projectId: {
+            equals: projectId
+          },
+          status: {
+            equals: status
+          }
+        },
+        orderBy: {
+          position: "asc"
+        }
+      })
+
+      const position = lastTask ? lastTask.position + 1 : 1
+
       const task = await prisma.task.create({
         data: {
           name,
@@ -96,6 +112,7 @@ const app = new Hono()
           dueDate,
           status,
           priority,
+          position,
           projectId,
           memberId
         }
@@ -174,7 +191,7 @@ const app = new Hono()
     }),
     zValidator("query", z.object({ projectId: z.string() })),
     async (c) => {
-      const { name, description, dueDate, priority, status, memberId } = c.req.valid("json")
+      const { name, description, dueDate, priority, status, position, memberId } = c.req.valid("json")
       const { projectId } = c.req.valid("query")
       const { id } = c.get("user")
       const { taskId } = c.req.param()
@@ -209,6 +226,7 @@ const app = new Hono()
           description,
           priority,
           status,
+          position,
           dueDate,
           memberId
         }
