@@ -24,5 +24,6 @@ export const updateTaskSchema = z.object({
   dueDate: z.coerce.date({ required_error: "Insert task due date." }).optional(),
   status: z.nativeEnum(TaskStatus).optional(),
   priority: z.nativeEnum(TaskPriority).optional(),
+  position: z.number().optional(),
   memberId: z.string().optional()
 })
