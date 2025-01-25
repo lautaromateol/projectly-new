@@ -1,5 +1,5 @@
 "use client"
-import { User } from "lucide-react"
+import { CircleDotDashed, User } from "lucide-react"
 import { InferResponseType } from "hono"
 import { format } from "date-fns"
 import { ColumnDef } from "@tanstack/react-table"
@@ -104,6 +104,17 @@ export const columns: ColumnDef<Task>[] = [
     header: "Priority",
     cell: ({ row }) => {
       const priority = row.getValue("priority") as TaskPriority
+
+      if (!priority) {
+        return (
+          <div className="flex items-center gap-x-2">
+            <div className="grid place-content-center rounded-full bg-slate-200 p-2 size-6">
+              <CircleDotDashed className="text-muted-foreground size-4" />
+            </div>
+            <p className="text-muted-foreground text-sm">No priority selected</p>
+          </div>
+        )
+      }
 
       return (
         <p className={cn(
