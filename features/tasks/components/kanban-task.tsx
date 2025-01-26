@@ -36,7 +36,7 @@ export function KanbanTask({ task }: { task: Task }) {
             imageUrl={task.member?.imageUrl ?? ""}
           />
         ) : (
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-1">
             <p className="text-muted-foreground text-xs">Unassigned</p>
             <div className="grid place-content-center rounded-full bg-slate-200 p-2 size-6">
               <User className="text-muted-foreground size-4" />
