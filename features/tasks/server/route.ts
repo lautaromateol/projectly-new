@@ -246,6 +246,15 @@ const app = new Hono()
             workspaceId: member.workspaceId
           }
         })
+      } else if (status === "DONE") {
+        await prisma.activityLog.create({
+          data: {
+            action: "COMPLETE",
+            memberId: member.id,
+            taskId: task.id,
+            workspaceId: member.workspaceId
+          }
+        })
       }
 
       return c.json({ data: task }, 200)
