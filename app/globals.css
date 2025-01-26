@@ -34,6 +34,7 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -66,7 +67,25 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Calendar styles */
+.fc .fc-button {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary-foreground shadow bg-gradient-to-b from-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-700;
+}
+
+.fc-toolbar-title {
+  @apply hidden
+}
+
+.fc-col-header-cell {
+  @apply bg-rose-100
+}
+
+.fc-col-header-cell-cushion {
+  @apply text-sm font-semibold text-rose-500
 }
