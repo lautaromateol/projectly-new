@@ -1,5 +1,6 @@
 import { Action } from "@prisma/client/edge"
 import { clsx, type ClassValue } from "clsx"
+import { isWithinInterval, subDays } from "date-fns"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -34,8 +35,21 @@ export function generateLogMessage({ action, taskTitle }: { action: Action, task
     case Action.DELETE:
       return `deleted task "${taskTitle}"`
 
+    case Action.COMPLETE:
+      return `completed task "${taskTitle}"`
+      
     default:
       return `uknown action task "${taskTitle}"`
 
   }
+}
+
+export function isInRange({ date, interval }: { date: Date, interval: number }) {
+  const start = subDays(new Date(), interval)
+  const end = new Date()
+
+  return isWithinInterval(date, {
+    start,
+    end
+  })
 }
