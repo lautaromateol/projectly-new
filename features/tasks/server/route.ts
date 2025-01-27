@@ -342,7 +342,7 @@ const app = new Hono()
         return c.json({ message: "Unauthorized." }, 401)
       }
 
-      const data = await prisma.task.deleteMany({
+      await prisma.task.deleteMany({
         where: {
           id: {
             in: ids
@@ -350,7 +350,7 @@ const app = new Hono()
         }
       })
 
-      return c.json({ message: `${data.count} tasks deleted successfully.` }, 200)
+      return c.json({ message: `${ids.length} tasks deleted successfully.` }, 200)
     }
   )
   .patch("/bulk-update/:projectId",
@@ -359,6 +359,7 @@ const app = new Hono()
         z.array(z.object({
           id: z.string(),
           status: z.nativeEnum(TaskStatus),
+          oldStatus: z.nativeEnum(TaskStatus),
           position: z.number()
         }))
     }), (result, c) => {
@@ -392,20 +393,35 @@ const app = new Hono()
         return c.json({ message: "Unauthorized." }, 401)
       }
 
-      await Promise.all(
-        tasks.map((task) => prisma.task.update({
-          where: {
-            id: task.id
-          },
-          data: {
-            status: task.status,
-            position: task.position
-          }
-        }))
-      )
-
-      return c.json({ message: `${tasks.length} tasks updated successfully.` }, 200)
+      await prisma.$transaction([
+        ...tasks.map((task) =>
+          prisma.task.update({
+            where: {
+              id: task.id
+            },
+            data: {
+              status: task.status,
+              position: task.position
+            }
+          })
+        ),
+        ...tasks
+          .filter((task) => task.oldStatus !== task.status && task.status === "DONE")
+          .map((task) =>
+            prisma.activityLog.create({
+              data: {
+                action: "COMPLETE",
+                memberId: member.id,
+                workspaceId: member.workspaceId,
+                taskId: task.id
+              }
+            })
+          )
+      ]);
+      
+      return c.json({ data: tasks.map((task) => task.id) }, 200)
     }
   )
+  
 
 export default app
