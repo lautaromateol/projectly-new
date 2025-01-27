@@ -5,7 +5,7 @@ import { useProjectId } from "@/features/projects/hooks/use-project-id";
 import { client } from "@/lib/client";
 
 type RequestType = InferRequestType<typeof client.api.tasks["bulk-update"][":projectId"]["$patch"]>["json"]
-type ResponseType = InferResponseType<typeof client.api.tasks["bulk-update"][":projectId"]["$patch"], 200>["message"]
+type ResponseType = InferResponseType<typeof client.api.tasks["bulk-update"][":projectId"]["$patch"], 200>["data"]
 
 export function useUpdateTasks() {
 
@@ -24,12 +24,14 @@ export function useUpdateTasks() {
         throw new Error("Failed to update tasks.")
       }
 
-      const { message } = await response.json()
+      const { data } = await response.json()
 
-      return message
+      return data
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      data.forEach((id) => queryClient.invalidateQueries({ queryKey: ["task", { id }] }))
       queryClient.invalidateQueries({ queryKey: ["tasks", { projectId }] })
+      queryClient.invalidateQueries({ queryKey: ["summary", { projectId }] })
     },
     onError: (error) => toast.error(error.message)
   })
