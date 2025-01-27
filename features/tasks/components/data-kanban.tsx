@@ -44,7 +44,7 @@ export function DataKanban({ data }: { data: Tasks }) {
 
     setTasks((prev) => {
 
-      let updatesPayload: { id: string; status: TaskStatus; position: number; }[] = []
+      let updatesPayload: { id: string; status: TaskStatus; oldStatus: TaskStatus; position: number; }[] = []
 
       const newTasks = { ...prev }
 
@@ -68,6 +68,7 @@ export function DataKanban({ data }: { data: Tasks }) {
       updatesPayload.push({
         id: updatedTask.id,
         status: destinationStatus,
+        oldStatus: sourceStatus,
         position: destination.index + 1
       })
 
@@ -78,6 +79,7 @@ export function DataKanban({ data }: { data: Tasks }) {
             updatesPayload.push({
               id: task.id,
               status: destinationStatus,
+              oldStatus: sourceStatus,
               position: newPosition
             })
           }
@@ -92,6 +94,7 @@ export function DataKanban({ data }: { data: Tasks }) {
               updatesPayload.push({
                 id: task.id,
                 status: destinationStatus,
+                oldStatus: sourceStatus,
                 position: newPosition
               })
             }
