@@ -5,6 +5,7 @@ import { TaskStatus } from "@prisma/client/edge";
 import { createTaskSchema, updateTaskSchema } from "@/features/tasks/schemas";
 import { sessionMiddleware } from "@/lib/session-middleware";
 import { prisma } from "@/lib/prisma";
+import { isInRange } from "@/lib/utils";
 
 const app = new Hono()
   .use("*", sessionMiddleware)
@@ -420,6 +421,82 @@ const app = new Hono()
       ]);
       
       return c.json({ data: tasks.map((task) => task.id) }, 200)
+    }
+  )
+  .get("/summary/:projectId",
+    async (c) => {
+      const { projectId } = c.req.param()
+      const { id } = c.get("user")
+
+      const member = await prisma.member.findFirst({
+        where: {
+          workspace: {
+            projects: {
+              some: {
+                id: {
+                  equals: projectId
+                }
+              }
+            }
+          },
+          userId: {
+            equals: id
+          }
+        }
+      })
+
+      if (!member) {
+        return c.json({ message: "Unauthorized." }, 401)
+      }
+
+      // Todas las tareas del proyecto
+      const tasks = await prisma.task.findMany({
+        where: {
+          projectId
+        },
+        include: {
+          activityLogs: {
+            select: {
+              action: true,
+              createdAt: true
+            }
+          }
+        },
+      })
+
+      const completedTasks = tasks.filter((task) => {
+        const hasBeenCompleted = !!task.activityLogs.find((log) => log.action === "COMPLETE" && isInRange({ date: log.createdAt, interval: 7 }))
+        return task.status === "DONE" && hasBeenCompleted
+      }).length
+
+      const updatedTasks = tasks.filter((task) => {
+        const hasBeenUpdated = !!task.activityLogs.find((log) => log.action === "UPDATE" && isInRange({ date: log.createdAt, interval: 7 }))
+        return task.status !== "DONE" && hasBeenUpdated
+      }
+      ).length
+
+      const createdTasks = tasks.filter((task) =>
+        isInRange({
+          date: new Date(task.createdAt),
+          interval: 7
+        })
+      ).length
+
+      const overdueTasks = tasks.filter((task) =>
+        isInRange({
+          date: new Date(task.dueDate),
+          interval: 7
+        })
+      ).length
+
+      return c.json({
+        data: {
+          completedTasks,
+          updatedTasks,
+          createdTasks,
+          overdueTasks
+        }
+      })
     }
   )
   
