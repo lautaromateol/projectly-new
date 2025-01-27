@@ -1,12 +1,13 @@
 "use client"
+import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
+import { useDeleteTasks } from "@/features/tasks/api/use-delete-tasks";
+import { useConfirm } from "@/hooks/use-confirm";
 import { DataTable } from "@/components/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
 import { columns } from "./columns";
-import { useConfirm } from "@/hooks/use-confirm";
-import { useDeleteTasks } from "../api/use-delete-tasks";
 import { DataKanban } from "./data-kanban";
 import { DataCalendar } from "./data-calendar";
+import { DataSummary } from "./data-summary";
 
 export function TasksTabs() {
 
@@ -21,13 +22,17 @@ export function TasksTabs() {
   )
 
   return (
-    <Tabs defaultValue="table">
+    <Tabs defaultValue="summary">
       <ConfirmDelete />
       <TabsList>
+        <TabsTrigger value="summary">Summary</TabsTrigger>
         <TabsTrigger value="table">Table</TabsTrigger>
         <TabsTrigger value="kanban">Kanban</TabsTrigger>
         <TabsTrigger value="calendar">Calendar</TabsTrigger>
       </TabsList>
+      <TabsContent value="summary">
+        <DataSummary />
+      </TabsContent>
       <TabsContent value="table">
         <DataTable
           filterKey="name"
