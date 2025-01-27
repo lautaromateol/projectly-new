@@ -2,6 +2,7 @@ import { History } from "lucide-react";
 import { useGetTaskActivityLogs } from "@/features/activity-logs/api/use-get-task-activty-logs";
 import { ActivityLog } from "./activity-log";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export function TaskActivityLogs({ taskId }: { taskId: string }) {
 
@@ -13,24 +14,27 @@ export function TaskActivityLogs({ taskId }: { taskId: string }) {
         <History className="size-4 text-muted-foreground" />
         <p className="text-sm font-semibold text-muted-foreground">Activity Logs</p>
       </div>
-      <div className="flex flex-col gap-y-2">
-        {
-          isLoadingActivityLogs ? (
-            <>
-              <Skeleton className="h-14 rounded" />
-              <Skeleton className="h-14 rounded" />
-            </>
-          )
-            :
-            (
+      <ScrollArea className="h-28 lg:h-56">
+        <div className="flex flex-col gap-y-2">
+          {
+            isLoadingActivityLogs ? (
               <>
-                {activityLogs?.map((activity) => (
-                  <ActivityLog activity={activity} key={activity.id} />
-                ))}
+                <Skeleton className="h-14 rounded" />
+                <Skeleton className="h-14 rounded" />
               </>
             )
-        }
-      </div>
+              :
+              (
+                <>
+                  {activityLogs?.map((activity) => (
+                    <ActivityLog activity={activity} key={activity.id} />
+                  ))}
+                </>
+              )
+          }
+        </div>
+        <ScrollBar orientation="vertical" />
+      </ScrollArea>
     </div>
   )
 }
