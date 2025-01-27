@@ -41,6 +41,15 @@ export function UpdateTaskForm({ task }: { task: Task }) {
   const { updateTask, isUpdatingTask } = useUpdateTask({ taskId: task.id })
 
   function onSubmit(data: z.infer<typeof updateTaskSchema>) {
+    const { formState: { dirtyFields } } = form
+
+    if (Object.keys(dirtyFields).length === 1 && Object.keys(dirtyFields)[0] === "status") {
+      updateTask({ status: data.status }, {
+        onSuccess: () => close()
+      })
+      return
+    }
+
     updateTask(data, {
       onSuccess: () => close()
     })
