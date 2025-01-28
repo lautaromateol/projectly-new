@@ -500,12 +500,32 @@ const app = new Hono()
         })
       ).length
 
+      const statusColors = {
+        TO_DO: "hsl(350, 75%, 50%)",
+        IN_PROGRESS: "hsl(40, 90%, 50%)", 
+        IN_REVIEW: "hsl(190, 80%, 50%)",
+        DONE: "hsl(145, 65%, 45%)", 
+        OVERDUE: "hsl(330, 75%, 55%)",
+      }    
+      
+      const chartData = Object.entries(
+        tasks.reduce((acc, task) => {
+          acc[task.status] = (acc[task.status] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>)
+      ).map(([status, count]) => ({
+        status: status as TaskStatus,
+        tasks: count,
+        fill: statusColors[status as keyof typeof statusColors],
+      }))
+      
       return c.json({
         data: {
           completedTasks,
           updatedTasks,
           createdTasks,
-          overdueTasks
+          overdueTasks,
+          chartData
         }
       })
     }
