@@ -39,12 +39,12 @@ export function DataCalendar({ data }: { data: Tasks }) {
     }
 
     return (
-      <KanbanTask task={task} />
+      <KanbanTask task={task} isCalendar />
     )
   }, [])
 
   return (
-    <div className="px-4 py-2">
+    <div className="py-2">
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridWeek"

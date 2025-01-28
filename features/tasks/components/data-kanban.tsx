@@ -127,7 +127,7 @@ export function DataKanban({ data }: { data: Tasks }) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="grid grid-cols-5 gap-x-4 w-full">
+      <div className="py-2 grid grid-cols-5 gap-x-4 w-full">
         {allStatus.map((status) => {
           const taskStatus = status as keyof typeof TaskStatus
           const statusTasks = tasks[taskStatus]
