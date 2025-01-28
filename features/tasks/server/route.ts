@@ -129,6 +129,17 @@ const app = new Hono()
         }
       })
 
+      if (status === "DONE") {
+        await prisma.activityLog.create({
+          data: {
+            action: "COMPLETE",
+            memberId: member.id,
+            taskId: task.id,
+            workspaceId: member.workspaceId
+          }
+        })
+      }
+
       return c.json({ data: task }, 200)
     })
   .get("/:taskId",
@@ -419,7 +430,7 @@ const app = new Hono()
             })
           )
       ]);
-      
+
       return c.json({ data: tasks.map((task) => task.id) }, 200)
     }
   )
@@ -499,6 +510,6 @@ const app = new Hono()
       })
     }
   )
-  
+
 
 export default app
