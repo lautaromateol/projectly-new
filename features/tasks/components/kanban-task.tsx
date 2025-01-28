@@ -9,7 +9,7 @@ import { useTaskDetailModal } from "../hooks/use-task-detail-modal"
 
 type Task = InferResponseType<typeof client.api.tasks["$get"], 200>["data"][0]
 
-export function KanbanTask({ task }: { task: Task }) {
+export function KanbanTask({ task, isCalendar }: { task: Task; isCalendar?: boolean }) {
 
   const { open } = useTaskDetailModal()
 
@@ -37,7 +37,9 @@ export function KanbanTask({ task }: { task: Task }) {
           />
         ) : (
           <div className="flex items-center gap-x-1">
-            <p className="text-muted-foreground text-xs">Unassigned</p>
+            {!isCalendar ? (
+              <p className="text-muted-foreground text-xs">Unassigned</p>
+            ) : null}
             <div className="grid place-content-center rounded-full bg-slate-200 p-2 size-6">
               <User className="text-muted-foreground size-4" />
             </div>
