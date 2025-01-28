@@ -33,5 +33,38 @@ const app = new Hono()
       return c.json({ data: activityLogs }, 200)
     }
   )
+  .get("/project/:projectId",
+    async (c) => {
+      const { projectId } = c.req.param()
+
+      const activityLogs = await prisma.activityLog.findMany({
+        where: {
+          task: {
+            projectId: {
+              equals: projectId
+            }
+          }
+        },
+        include: {
+          member: {
+            select: {
+              name: true,
+              imageUrl: true
+            }
+          },
+          task: {
+            select: {
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: "desc"
+        }
+      })
+
+      return c.json({ data: activityLogs }, 200)
+    }
+  )
 
 export default app
