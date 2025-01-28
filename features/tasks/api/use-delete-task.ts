@@ -31,6 +31,8 @@ export function useDeleteTask({ taskId }: { taskId: string }) {
       toast.success(`${data.name} deleted.`)
       queryClient.invalidateQueries({ queryKey: ["tasks", { projectId: data.projectId }] })
       queryClient.invalidateQueries({ queryKey: ["task", { id: data.id }] })
+      queryClient.invalidateQueries({ queryKey: ["activity-logs", { projectId: data.projectId }] })
+      queryClient.invalidateQueries({ queryKey: ["summary", { projectId: data.projectId }] })
     },
     onError: (error) => toast.error(error.message)
   })

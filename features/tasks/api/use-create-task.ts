@@ -32,6 +32,7 @@ export function useCreateTask() {
       toast.success(`${data.name} created.`)
       queryClient.invalidateQueries({ queryKey: ["tasks", { projectId: data.projectId }] })
       queryClient.invalidateQueries({ queryKey: ["summary", { projectId: data.projectId }] })
+      queryClient.invalidateQueries({ queryKey: ["activity-logs", { projectId: data.projectId }] })
     },
     onError: (error) => toast.error(error.message)
   })

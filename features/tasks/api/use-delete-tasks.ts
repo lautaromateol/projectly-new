@@ -32,6 +32,7 @@ export function useDeleteTasks() {
       toast.success(data)
       queryClient.invalidateQueries({ queryKey: ["tasks", { projectId }] })
       queryClient.invalidateQueries({ queryKey: ["summary", { projectId }] })
+      queryClient.invalidateQueries({ queryKey: ["activity-logs", { projectId }] })
     },
     onError: (error) => toast.error(error.message)
   })
