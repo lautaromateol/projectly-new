@@ -23,7 +23,7 @@ export function DataCalendar({ data }: { data: Tasks }) {
     const title = eventInfo.event.title
     const date = eventInfo.event.startStr
 
-    const { description, status, priority, member, position, memberId, projectId } = eventInfo.event.extendedProps
+    const { description, status, priority, member, position, memberId, projectId, createdAt, updatedAt } = eventInfo.event.extendedProps
 
     const task: Task = {
       id,
@@ -35,7 +35,9 @@ export function DataCalendar({ data }: { data: Tasks }) {
       position: position as number,
       member: memberId ? { name: member.name as string, imageUrl: member.imageUrl as string ?? null } : null,
       memberId: memberId ?? null,
-      projectId: projectId as string
+      projectId: projectId as string,
+      createdAt,
+      updatedAt
     }
 
     return (
