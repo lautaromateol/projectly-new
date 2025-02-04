@@ -1,11 +1,12 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { EventContentArg } from '@fullcalendar/core/index.js'
-import { InferResponseType } from "hono"
-import { client } from "@/lib/client"
 import { useCallback } from 'react'
+import { InferResponseType } from "hono"
 import { TaskPriority, TaskStatus } from '@prisma/client/edge'
+import { EventContentArg } from '@fullcalendar/core/index.js'
+import { client } from "@/lib/client"
 import { KanbanTask } from './kanban-task'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 type Tasks = InferResponseType<typeof client.api.tasks["$get"], 200>["data"]
 type Task = Tasks[0]
@@ -46,13 +47,20 @@ export function DataCalendar({ data }: { data: Tasks }) {
   }, [])
 
   return (
-    <div className="py-2">
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridWeek"
-        events={events}
-        eventContent={renderEventContent}
-      />
+    <div className="h-screen py-2">
+      <ScrollArea className="h-full">
+        <div className="min-w-[800px]">
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridWeek"
+            events={events}
+            eventContent={renderEventContent}
+            height="auto"
+            contentHeight="auto"
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   )
 }

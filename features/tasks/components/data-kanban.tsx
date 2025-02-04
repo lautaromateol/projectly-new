@@ -4,6 +4,7 @@ import { TaskStatus } from "@prisma/client/edge"
 import { DragDropContext, DropResult } from "@hello-pangea/dnd"
 import { useUpdateTasks } from "@/features/tasks/api/use-update-tasks"
 import { client } from "@/lib/client"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { KanbanColumn } from "./kanban-column"
 
 type Tasks = InferResponseType<typeof client.api.tasks["$get"], 200>["data"]
@@ -107,7 +108,7 @@ export function DataKanban({ data }: { data: Tasks }) {
     })
 
   }, [updateTasks])
-  
+
 
   useEffect(() => {
     const newTasks: TasksState = {
@@ -127,16 +128,19 @@ export function DataKanban({ data }: { data: Tasks }) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="py-2 grid grid-cols-5 gap-x-4 w-full">
-        {allStatus.map((status) => {
-          const taskStatus = status as keyof typeof TaskStatus
-          const statusTasks = tasks[taskStatus]
+      <ScrollArea>
+        <div className="py-2 grid grid-cols-5 gap-x-4 min-w-[900px]">
+          {allStatus.map((status) => {
+            const taskStatus = status as keyof typeof TaskStatus
+            const statusTasks = tasks[taskStatus]
 
-          return (
-            <KanbanColumn tasks={statusTasks} status={taskStatus} key={status} />
-          )
-        })}
-      </div>
+            return (
+              <KanbanColumn tasks={statusTasks} status={taskStatus} key={status} />
+            )
+          })}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </DragDropContext>
   )
 }
