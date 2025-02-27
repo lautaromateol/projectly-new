@@ -38,6 +38,9 @@ const app = new Hono()
           workspaceId: {
             equals: workspaceId
           }
+        },
+        include: {
+          tasks: true
         }
       })
 
