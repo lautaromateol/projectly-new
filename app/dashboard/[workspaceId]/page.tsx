@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { prisma } from "@/lib/prisma"
 import { auth } from "@clerk/nextjs/server"
+import { WorkspaceIdPage } from "@/features/workspaces/components/workspace-id-page"
+import { prisma } from "@/lib/prisma"
 
 export default async function Page({ params }: any) {
 
@@ -20,6 +21,6 @@ export default async function Page({ params }: any) {
   }
 
   return (
-    <div>Page</div>
+    <WorkspaceIdPage />
   )
 }
