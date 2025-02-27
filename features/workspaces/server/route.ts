@@ -95,6 +95,9 @@ const app = new Hono()
               }
             }
           }
+        },
+        include: {
+          members: true
         }
       })
 
