@@ -89,3 +89,14 @@ body {
 .fc-col-header-cell-cushion {
   @apply text-sm font-semibold text-rose-500
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
