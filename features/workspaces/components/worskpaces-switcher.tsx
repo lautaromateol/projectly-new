@@ -1,45 +1,45 @@
-import { useRouter } from "next/navigation"
-import { useGetWorskpaces } from "@/features/workspaces/api/use-get-workspaces"
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { WorkspaceAvatar } from "./workspace-avatar"
+"use client"
+import Link from "next/link";
+import { useGetWorskpaces } from "@/features/workspaces/api/use-get-workspaces";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { Skeleton } from "@/components/ui/skeleton";
+import { WorkspaceAvatar } from "./workspace-avatar";
+import { cn } from "@/lib/utils";
 
 export function WorkspacesSwitcher() {
-
-  const router = useRouter()
-
-  const { workspaces, isLoadingWorskpaces } = useGetWorskpaces()
-  const workspaceId = useWorkspaceId()
-
-  function onValueChange(workspaceId: string) {
-    router.push(`/dashboard/${workspaceId}`)
-  }
+  const { workspaces, isLoadingWorskpaces } = useGetWorskpaces();
+  const workspaceId = useWorkspaceId();
 
   if (isLoadingWorskpaces) {
     return (
-      <Skeleton className="h-9 w-full" />
-    )
+      <div className="space-y-1">
+        <Skeleton className="h-8 w-full bg-slate-800" />
+        <Skeleton className="h-8 w-full bg-slate-800" />
+      </div>
+    );
   }
 
   return (
-    <Select value={workspaceId} onValueChange={onValueChange}>
-      <SelectTrigger>
-        <SelectValue placeholder="Select a workspace" />
-      </SelectTrigger>
-      <SelectContent>
-        {workspaces?.map((workspace) => (
-          <SelectItem value={workspace.id} key={workspace.id}>
-            <div className="flex items-center gap-x-2">
-              <WorkspaceAvatar
-                name={workspace.name}
-                imageUrl={workspace.imageUrl ?? ""}
-              />
-              <p className="text-sm font-medium">{workspace.name}</p>
-            </div>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  )
+    <div className="space-y-0.5">
+      {workspaces?.map((workspace) => (
+        <Link href={`/dashboard/${workspace.id}`} key={workspace.id}>
+          <div
+            className={cn(
+              "flex items-center gap-x-2.5 px-3 py-2 rounded-md transition-colors",
+              workspaceId === workspace.id
+                ? "bg-slate-700 text-white"
+                : "text-slate-400 hover:text-white hover:bg-slate-800"
+            )}
+          >
+            <WorkspaceAvatar
+              name={workspace.name}
+              imageUrl={workspace.imageUrl ?? ""}
+              className="size-5 shrink-0"
+            />
+            <span className="text-sm font-medium truncate">{workspace.name}</span>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
 }
