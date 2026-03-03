@@ -1,45 +1,58 @@
-import { client } from "@/lib/client"
-import { InferResponseType } from "hono"
-import { ProjectAvatar } from "./project-avatar"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
+import { client } from "@/lib/client";
+import { InferResponseType } from "hono";
+import { ProjectAvatar } from "./project-avatar";
+import { Progress } from "@/components/ui/progress";
+import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 
-type Project = InferResponseType<typeof client.api.projects.$get, 200>["data"][0]
+type Project = InferResponseType<typeof client.api.projects.$get, 200>["data"][0];
 
 interface ProjectCardInterface {
-  project: Project
+  project: Project;
 }
 
 export function ProjectCard({ project }: ProjectCardInterface) {
-
-  const incompleteTasks = project.tasks.filter((task) => task.status !== "DONE").length
-  const tasksLength = project.tasks.length
-  const completionPercentage = tasksLength === 0 ? 0 : (incompleteTasks / tasksLength) * 100
+  const doneTasks = project.tasks.filter((task) => task.status === "DONE").length;
+  const tasksLength = project.tasks.length;
+  const completionPercentage = tasksLength === 0 ? 0 : (doneTasks / tasksLength) * 100;
 
   return (
     <Link href={`/dashboard/${project.workspaceId}/projects/${project.id}`}>
-      <div className="px-4 py-2 rounded shadow w-full lg:w-64 space-y-4 transform transition duration-100 hover:scale-105 cursor-pointer">
-        <div className="flex items-center gap-x-2">
+      <div className="group bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-slate-300 transition-all duration-200 cursor-pointer">
+        {/* Project header */}
+        <div className="flex items-start gap-x-3 mb-5">
           <ProjectAvatar
             name={project.name}
             imageUrl={project.imageUrl ?? ""}
+            className="size-9 shrink-0"
           />
-          <p className="text-lg font-semibold">{project.name}</p>
-        </div>
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <p className="text-sm">Progress</p>
-            <p className="text-sm">{completionPercentage.toFixed(2)}%</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-rose-600 transition-colors leading-tight">
+              {project.name}
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {tasksLength} task{tasksLength !== 1 ? "s" : ""}
+            </p>
           </div>
-          <Progress value={completionPercentage} />
         </div>
-        <Separator />
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">Tasks completed</p>
-          <p className="text-sm text-gray-500">{incompleteTasks} of {tasksLength}</p>
+
+        {/* Progress */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-slate-500">Progress</span>
+            <span className="text-xs font-semibold text-slate-700">{completionPercentage.toFixed(0)}%</span>
+          </div>
+          <Progress value={completionPercentage} className="h-1.5 bg-slate-100" />
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center gap-x-1.5 mt-4 pt-4 border-t border-slate-100">
+          <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+          <p className="text-xs text-slate-500">
+            {doneTasks} of {tasksLength} completed
+          </p>
         </div>
       </div>
     </Link>
-  )
+  );
 }
